@@ -14,6 +14,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject DimondBonusText;
 
     public GameObject[] UITexts;
+    private Text[] ScoreTexts;
 
     public GameObject Camera;
     public Material Floor;
@@ -22,10 +23,10 @@ public class PlayerScript : MonoBehaviour
     private bool canRetry;
     private bool floorColorChange;
 
-    public float speed;
     private int newFloorColor;
     private int score;
 
+    public float speed;
     private float targetX;
     private float targetY;
     private float ratioScale;
@@ -49,9 +50,13 @@ public class PlayerScript : MonoBehaviour
         UITexts[3].gameObject.transform.position = new Vector3((float)Screen.width / 2, (float)Screen.height / 2, 0);
         UITexts[4].gameObject.transform.position = new Vector3((float)Screen.width / 2, (float)Screen.height / 2, 0);
 
+        ScoreTexts = new Text[UITexts.Length];
+        int i = 0;
         foreach (GameObject UItext in UITexts)
         {
             UItext.transform.localScale = new Vector3(1f * targetScale, 1f * targetScale, 1f);
+            ScoreTexts[i] = UItext.gameObject.GetComponent<Text>();
+            i++;
         }
 
         score = 0;
@@ -71,7 +76,7 @@ public class PlayerScript : MonoBehaviour
             UITexts[4].SetActive(false);
             UITexts[0].SetActive(true);
 
-            UITexts[0].gameObject.GetComponent<Text>().text = score.ToString();
+            ScoreTexts[0].text = score.ToString();
 
             if (score != 0 && score % 25 == 0)
             {
@@ -158,8 +163,8 @@ public class PlayerScript : MonoBehaviour
                 {
                     PlayerPrefs.SetInt("BestScore", score);
                 }
-                UITexts[1].gameObject.GetComponent<Text>().text = "Score: " + score.ToString();
-                UITexts[2].gameObject.GetComponent<Text>().text = "Best Score: " + PlayerPrefs.GetInt("BestScore").ToString();
+                ScoreTexts[1].text = "Score: " + score.ToString();
+                ScoreTexts[2].text = "Best Score: " + PlayerPrefs.GetInt("BestScore").ToString();
                 Invoke("Retry", 1.5f);
             }
         }
